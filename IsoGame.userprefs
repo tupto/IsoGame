@@ -1,0 +1,17 @@
+﻿<Properties StartupConfiguration="{D63FA525-2384-42ED-AFB0-38D2E6F4F650}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="IsoGame/Player.cs">
+    <Files>
+      <File FileName="IsoGame/IsoGame.cs" Line="37" Column="26" />
+      <File FileName="IsoGame/Tile.cs" Line="22" Column="45" />
+      <File FileName="IsoGame/Map.cs" Line="28" Column="51" />
+      <File FileName="IsoGame/Player.cs" Line="7" Column="4" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.IsoGame PreferredExecutionTarget="MonoDevelop.Default" />
+  <MultiItemStartupConfigurations />
+</Properties>
