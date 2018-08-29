@@ -28,13 +28,18 @@ namespace IsoGame
             renderObjects.Add(obj);
         }
 
-        public Vector2 TranslateToIso(Vector2 orthoVec)
+        public Vector2 TranslateToIso(Vector2 position)
         {
             Vector2 isoVec = new Vector2();
-            isoVec.X = (orthoVec.X * Tile.TileWidth / 2) - (orthoVec.Y * Tile.TileWidth / 2);
-            isoVec.Y = (orthoVec.X * Tile.TileHeight / 2) + (orthoVec.Y * Tile.TileHeight / 2);
+            isoVec.X = (position.X * Tile.TileWidth / 2) - (position.Y * Tile.TileWidth / 2);
+            isoVec.Y = (position.X * Tile.TileHeight / 2) + (position.Y * Tile.TileHeight / 2);
 
             return isoVec;
+        }
+
+        public Vector2 TranslateToOrtho(Vector2 position)
+        {
+            return position * new Vector2(Tile.TileWidth, Tile.TileHeight);
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -54,7 +59,8 @@ namespace IsoGame
                 }
                 else
                 {
-                    spriteBatch.Draw(obj.tex, obj.position * new Vector2(Tile.TileWidth, Tile.TileHeight), Color.White);
+                    Vector2 orthoPos = TranslateToOrtho(obj.position);
+                    spriteBatch.Draw(obj.tex, orthoPos, Color.White);
                 }
             }
             renderObjects.Clear();
