@@ -40,7 +40,7 @@ namespace IsoGame
 				}
 			}
 
-			player = new Player(this, new Vector2(64, 64), 64.0f);
+			player = new Player(this, new Vector2(2, 2), 8);
 		}
 
 		public Rectangle[] GetCollisions(Rectangle colRect)
@@ -51,7 +51,7 @@ namespace IsoGame
 			{
 				for (int y = 0; y < mapHeight; y++)
 				{
-					Rectangle rect = new Rectangle(x * Tile.TILE_WIDTH, y * Tile.TILE_HEIGHT, Tile.TILE_WIDTH, Tile.TILE_HEIGHT);
+					Rectangle rect = new Rectangle(x * Tile.TileWidth, y * Tile.TileHeight, Tile.TileWidth, Tile.TileHeight);
 					if (rect.Intersects(colRect) && map[x, y].tileType == Tile.TileType.Wall)
 					{
 						collisions.Add(rect);
@@ -67,18 +67,19 @@ namespace IsoGame
 			player.Update(gameTime);
 		}
 
-		public void Render(SpriteBatch spriteBatch)
+		public void Render(Renderer renderer)
 		{
 			for (int x = 0; x < mapWidth; x++)
 			{
 				for (int y = 0; y < mapHeight; y++)
 				{
 					Texture2D mapTex = Tile.GetTextureFromType(map[x, y].tileType);
-					spriteBatch.Draw(mapTex, new Vector2(x * Tile.TILE_WIDTH, y * Tile.TILE_HEIGHT), Color.White);
-				}
+                    RenderObj obj = new RenderObj { tex = mapTex, position = new Vector2(x, y) };
+                    renderer.AddObject(obj);
+                }
 			}
 
-			player.Draw(spriteBatch);
+			player.Render(renderer);
 		}
 	}
 }

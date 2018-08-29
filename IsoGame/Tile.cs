@@ -4,14 +4,20 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace IsoGame
 {
-	public class Tile
-	{
-		public TileType tileType;
+    public class Tile
+    {
+        public TileType tileType;
 
-		public const int TILE_WIDTH = 32;
-		public const int TILE_HEIGHT = 32;
+        public static int TileWidth 
+        {
+            get { return Renderer.IsoRendering ? 64 : 32; }
+        }
+		public static int TileHeight
+        {
+            get { return Renderer.IsoRendering ? 32 : 32; }
+        }
 
-		static Texture2D grassTex;
+static Texture2D grassTex;
 		static Texture2D waterTex;
 		static Texture2D wallTex;
 
@@ -24,42 +30,54 @@ namespace IsoGame
 			switch (type)
 			{
 				case TileType.Grass:
-					if (grassTex == null)
+                    if (Renderer.IsoRendering)
+                    {
+                        return IsoGame.CurrentInstance.isoGrassTex;
+                    }
+                    if (grassTex == null)
 					{
-						grassTex = new Texture2D(IsoGame.CurrentInstance.GraphicsDevice, TILE_WIDTH, TILE_HEIGHT);
+                        grassTex = new Texture2D(IsoGame.CurrentInstance.GraphicsDevice, TileWidth, TileHeight);
 
-						Color[] data = new Color[TILE_WIDTH * TILE_HEIGHT];
-						for (int i = 0; i < TILE_WIDTH * TILE_HEIGHT; i++)
-						{
-							data[i] = new Color(70, 200, 70);
-						}
-						grassTex.SetData<Color>(data);
+                        Color[] data = new Color[TileWidth * TileHeight];
+                        for (int i = 0; i < TileWidth * TileHeight; i++)
+                        {
+                            data[i] = new Color(70, 200, 70);
+                        }
+                        grassTex.SetData<Color>(data);
 					}
 					return grassTex;
 				case TileType.Water:
-					if (waterTex == null)
+                    if (Renderer.IsoRendering)
+                    {
+                        return IsoGame.CurrentInstance.isoWaterTex;
+                    }
+                    if (waterTex == null)
 					{
-						waterTex = new Texture2D(IsoGame.CurrentInstance.GraphicsDevice, TILE_WIDTH, TILE_HEIGHT);
+                        waterTex = new Texture2D(IsoGame.CurrentInstance.GraphicsDevice, TileWidth, TileHeight);
 
-						Color[] data = new Color[TILE_WIDTH * TILE_HEIGHT];
-						for (int i = 0; i < TILE_WIDTH * TILE_HEIGHT; i++)
-						{
-							data[i] = new Color(70, 70, 200);
-						}
-						waterTex.SetData<Color>(data);
+                        Color[] data = new Color[TileWidth * TileHeight];
+                        for (int i = 0; i < TileWidth * TileHeight; i++)
+                        {
+                            data[i] = new Color(70, 70, 200);
+                        }
+                        waterTex.SetData<Color>(data);
 					}
 					return waterTex;
 				case TileType.Wall:
-					if (wallTex == null)
-					{
-						wallTex = new Texture2D(IsoGame.CurrentInstance.GraphicsDevice, TILE_WIDTH, TILE_HEIGHT);
+                    if (Renderer.IsoRendering)
+                    {
+                        return IsoGame.CurrentInstance.isoWallTex;
+                    }
+                    if (wallTex == null)
+                    {
+                        wallTex = new Texture2D(IsoGame.CurrentInstance.GraphicsDevice, TileWidth, TileHeight);
 
-						Color[] data = new Color[TILE_WIDTH * TILE_HEIGHT];
-						for (int i = 0; i < TILE_WIDTH * TILE_HEIGHT; i++)
-						{
-							data[i] = new Color(200, 70, 70);
-						}
-						wallTex.SetData<Color>(data);
+                        Color[] data = new Color[TileWidth * TileHeight];
+                        for (int i = 0; i < TileWidth * TileHeight; i++)
+                        {
+                            data[i] = new Color(200, 70, 70);
+                        }
+                        wallTex.SetData<Color>(data);
 					}
 					return wallTex;
 				default:

@@ -9,6 +9,7 @@ namespace IsoGame
 	{
 		Vector2 position;
 		Vector2 velocity;
+        Vector2 renderOffset;
 		float speed;
 		Map map;
 
@@ -22,9 +23,14 @@ namespace IsoGame
 			this.speed = speed;
 		}
 
+        public Vector2 GetRenderOffset()
+        {
+            return new Vector2(-playerTex?.Width / 2 ?? 1, -playerTex?.Height / 2 ?? 1);
+        }
+
 		public Rectangle GetCollisionRect()
 		{
-			return new Rectangle((int)position.X, (int)position.Y, playerTex?.Width ?? 1, playerTex?.Height ?? 1);
+			return new Rectangle((int)position.X * Tile.TileWidth, (int)position.Y * Tile.TileHeight, playerTex?.Width ?? 1, playerTex?.Height ?? 1);
 		}
 
 		public void Update(GameTime gameTime)
@@ -57,61 +63,37 @@ namespace IsoGame
 				velocity.X = 0;
 			}
 
-			position += velocity;
+            Renderer.IsoRendering = ks.CapsLock;
 
-			HandleMapCollisions();
+            Vector2 oldPosition = position;
+            position += velocity;
+
+			HandleMapCollisions(oldPosition);
 		}
 
-		public void HandleMapCollisions()
+		public void HandleMapCollisions(Vector2 oldPosition)
 		{
-			int dY = 0;
-			int dX = 0;
 			Rectangle myRect = GetCollisionRect();
 			foreach (Rectangle rect in map.GetCollisions(myRect))
 			{
-				int diff;
-				if (myRect.Top < rect.Bottom)
-				{
-					diff = rect.Bottom - myRect.Top;
-
-					if (dY < diff)
-						dY = diff;
-				}
-				else if (myRect.Bottom > rect.Top)
-				{
-					diff = rect.Top - myRect.Bottom;
-
-					if (dY > diff)
-						dY = diff;
-				}
+				if (myRect.Top < rect.Bottom || myRect.Bottom > rect.Top)
+                {
+                    myRect.Y = (int)oldPosition.Y;
+                    position.Y = oldPosition.Y;
+                }
 			}
-
-			myRect.Y += dY;
-			position.Y += dY;
 
 			foreach (Rectangle rect in map.GetCollisions(myRect))
 			{
-				int diff;
-				if (myRect.Left < rect.Right)
-				{
-					diff = rect.Right - myRect.Left;
-
-					if (dX < diff)
-						dX = diff;
-				}
-				else if (myRect.Right > rect.Left)
-				{
-					diff = rect.Left - myRect.Right;
-
-					if (dX > diff)
-						dX = diff;
-				}
+				if (myRect.Left < rect.Right || myRect.Right > rect.Left)
+                {
+                    myRect.X = (int)oldPosition.X;
+                    position.X = oldPosition.X;
+                }
 			}
-
-			position.X += dX;
 		}
 
-		public void Draw(SpriteBatch spriteBatch)
+		public void Render(Renderer renderer)
 		{
 			if (playerTex == null)
 			{
@@ -123,8 +105,8 @@ namespace IsoGame
 				}
 				playerTex.SetData<Color>(data);
 			}
-
-			spriteBatch.Draw(playerTex, position, Color.White);
-		}
+            
+            renderer.AddObject(new RenderObj { tex = playerTex, position = position, renderOffset = GetRenderOffset() });
+        }
 	}
 }
